@@ -58,8 +58,12 @@ public class WebGraph {
 	 * 
 	 * @throws IllegalArgumentException If url is not unique and already exists in
 	 *                                  the graph, or if either argument is null.
+	 * @throws FullGraphException       If the graph is already full
 	 */
-	public void addPage(String url, LinkedList<String> keywords) throws IllegalArgumentException {
+	public void addPage(String url, LinkedList<String> keywords) throws IllegalArgumentException, FullGraphException {
+		if (pageCount == MAX_PAGES) {
+			throw new FullGraphException("The graph is already full.");
+		}
 		if (url == null) {
 			throw new IllegalArgumentException("The URL should not be null.");
 		} else if (keywords == null) {
@@ -73,6 +77,7 @@ public class WebGraph {
 		}
 		pages.addLast(new WebPage(url, keywords, pageCount));
 		pageCount += 1;
+		updatePageRanks();
 	}
 
 	/**
@@ -108,6 +113,7 @@ public class WebGraph {
 			WebPage page = list.next();
 			page.setIndex(page.getIndex() - 1);
 		}
+		updatePageRanks();
 	}
 
 	/**
@@ -133,6 +139,7 @@ public class WebGraph {
 		}
 
 		edges[sourceIndex][destinationIndex] = 1;
+		updatePageRanks();
 	}
 
 	/**
@@ -162,6 +169,38 @@ public class WebGraph {
 		}
 
 		edges[sourceIndex][destinationIndex] = 0;
+		updatePageRanks();
+	}
+
+	/**
+	 * Calculates and assigns the PageRank for the specified page.
+	 * 
+	 * @param page The page to update the pageRank of
+	 */
+	public void updatePageRank(WebPage page) {
+		ListIterator<WebPage> list = pages.listIterator();
+		int pageRank = 0;
+		while (list.hasNext()) {
+			int sourceIndex = pages.indexOf(list.next());
+			if (edges[sourceIndex][page.getIndex()] == 1) {
+				pageRank += 1;
+			}
+		}
+		page.setRank(pageRank);
+	}
+
+	/**
+	 * Calculates and assigns the PageRank for every page in the WebGraph.
+	 * 
+	 * <dt>Postconditions:</dt>
+	 * <dd>All WebPages in the graph have been assigned their proper PageRank.</dd>
+	 * </dl>
+	 */
+	public void updatePageRanks() {
+		ListIterator<WebPage> list = pages.listIterator();
+		while (list.hasNext()) {
+			updatePageRank(list.next());
+		}
 	}
 
 }
