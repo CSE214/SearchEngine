@@ -57,11 +57,48 @@ public class WebGraph {
 	}
 
 	/**
+	 * Removes the WebPage from the graph with the given URL.
 	 * 
-	 * @param url
+	 * @param url The URL of the page to remove from the graph.
+	 * 
+	 *            <dt>Postconditions:</dt>
+	 *            <dd>The WebPage with the indicated URL has been removed from the
+	 *            graph, and it's corresponding row and column has been removed from
+	 *            the adjacency matrix. All pages that has an index greater than the
+	 *            index that was removed should decrease their index value by 1. If
+	 *            url is null or could not be found in pages, the method ignores the
+	 *            input and does nothing.</dd>
+	 *            </dl>
+	 * @throws IllegalArgumentException If url does not exist in the graph or is
+	 *                                  null
 	 */
-	public void removePage(String url) {
-
+	public void removePage(String url) throws IllegalArgumentException {
+		// Check for null
+		if (url == null) {
+			throw new IllegalArgumentException("The URL should not be null.");
+		}
+		// Find index if exists
+		int removeIndex = -1;
+		ListIterator<WebPage> list = pages.listIterator();
+		while (list.hasNext()) {
+			WebPage page = list.next();
+			if (page.getUrl().equals(url)) {
+				removeIndex = pages.indexOf(page);
+				break;
+			}
+		}
+		if (removeIndex == -1) {
+			throw new IllegalArgumentException("That URL does not exist in the graph.");
+		}
+		// Remove page
+		pages.remove(removeIndex);
+		pageCount -= 1;
+		// Update indices
+		list = pages.listIterator(removeIndex);
+		while (list.hasNext()) {
+			WebPage page = list.next();
+			page.setIndex(page.getIndex() - 1);
+		}
 	}
 
 }
