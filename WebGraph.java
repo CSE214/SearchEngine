@@ -19,6 +19,25 @@ public class WebGraph {
 	}
 
 	/**
+	 * Obtains the index of a webPage in the pages list specified by URL.
+	 * 
+	 * @param url The URL to search for
+	 * @return The index
+	 */
+	public int getIndex(String url) {
+		int removeIndex = -1;
+		ListIterator<WebPage> list = pages.listIterator();
+		while (list.hasNext()) {
+			WebPage page = list.next();
+			if (page.getUrl().equals(url)) {
+				removeIndex = pages.indexOf(page);
+				break;
+			}
+		}
+		return removeIndex;
+	}
+
+	/**
 	 * Adds a page to the WebGraph
 	 * 
 	 * @param url      The URL of the webpage (must not already exist in the
@@ -69,36 +88,80 @@ public class WebGraph {
 	 *            url is null or could not be found in pages, the method ignores the
 	 *            input and does nothing.</dd>
 	 *            </dl>
-	 * @throws IllegalArgumentException If url does not exist in the graph or is
-	 *                                  null
 	 */
-	public void removePage(String url) throws IllegalArgumentException {
+	public void removePage(String url) {
 		// Check for null
 		if (url == null) {
-			throw new IllegalArgumentException("The URL should not be null.");
+			return;
 		}
 		// Find index if exists
-		int removeIndex = -1;
-		ListIterator<WebPage> list = pages.listIterator();
-		while (list.hasNext()) {
-			WebPage page = list.next();
-			if (page.getUrl().equals(url)) {
-				removeIndex = pages.indexOf(page);
-				break;
-			}
-		}
+		int removeIndex = getIndex(url);
 		if (removeIndex == -1) {
-			throw new IllegalArgumentException("That URL does not exist in the graph.");
+			return;
 		}
 		// Remove page
 		pages.remove(removeIndex);
 		pageCount -= 1;
 		// Update indices
-		list = pages.listIterator(removeIndex);
+		ListIterator<WebPage> list = pages.listIterator(removeIndex);
 		while (list.hasNext()) {
 			WebPage page = list.next();
 			page.setIndex(page.getIndex() - 1);
 		}
+	}
+
+	/**
+	 * Adds a link from the WebPage with the URL indicated by source to the WebPage
+	 * with the URL indicated by destination.
+	 * 
+	 * @param source      The source of the link
+	 * @param destination The destination of the link
+	 * @throws IllegalArgumentException If either of the URLs are null or could not
+	 *                                  be found in pages.
+	 */
+	public void addLink(String source, String destination) throws IllegalArgumentException {
+		if (source == null || destination == null) {
+			throw new IllegalArgumentException("A URL should not be null.");
+		}
+
+		int sourceIndex = getIndex(source);
+		int destinationIndex = getIndex(destination);
+		if (sourceIndex == -1) {
+			throw new IllegalArgumentException("The source is not in the graph.");
+		} else if (destinationIndex == -1) {
+			throw new IllegalArgumentException("The destination is not in the graph.");
+		}
+
+		edges[sourceIndex][destinationIndex] = 1;
+	}
+
+	/**
+	 * Removes the specified link from the graph.
+	 * 
+	 * @param source      The source of the link
+	 * @param destination The destination of the link
+	 * 
+	 *                    <dt>Postconditions:</dt>
+	 *                    <dd>The entry in links for the specified hyperlink has
+	 *                    been set to 0 (no link). If either of the URLs could not
+	 *                    be found, the input is ignored and the method does
+	 *                    nothing.</dd>
+	 *                    </dl>
+	 */
+	public void removeLink(String source, String destination) {
+		if (source == null || destination == null) {
+			return;
+		}
+
+		int sourceIndex = getIndex(source);
+		int destinationIndex = getIndex(destination);
+		if (sourceIndex == -1) {
+			return;
+		} else if (destinationIndex == -1) {
+			return;
+		}
+
+		edges[sourceIndex][destinationIndex] = 0;
 	}
 
 }
