@@ -3,6 +3,12 @@ package searchEngine;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
+/**
+ * <code>WebGraph</code> class simulates the web with a directed graph.
+ *
+ * @author Sayan Sivakumaran e-mail: sayan.sivakumaran@stonybrook.edu Stony
+ *         Brook ID: 110261379
+ **/
 public class WebGraph {
 	private static final int MAX_PAGES = 40;
 	private int[][] edges;
@@ -200,6 +206,18 @@ public class WebGraph {
 		ListIterator<WebPage> list = pages.listIterator();
 		while (list.hasNext()) {
 			updatePageRank(list.next());
+		}
+	}
+
+	/**
+	 * Prints the WebGraph in tabular form
+	 */
+	public void printTable() {
+		String heading = String.format("%-6s | %-20s | %-15s | %-30s", "Index", "URL", "PageRank", "Links", "Keywords");
+		System.out.println("\n" + heading);
+		ListIterator<WebPage> list = pages.listIterator();
+		while (list.hasNext()) {
+			System.out.println(list.next().toString());
 		}
 	}
 

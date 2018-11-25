@@ -1,6 +1,7 @@
 package searchEngine;
 
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 /**
  * <code>WebPage</code> class represents a hyperlinked document on the web.
@@ -81,6 +82,29 @@ public class WebPage {
 		this.url = url;
 		this.index = index;
 		this.keywords = keywords;
+	}
+
+	/**
+	 * @return A string list of keywords
+	 */
+	public String keywordsToString() {
+		String keywordList = "";
+		ListIterator<String> list = keywords.listIterator();
+		while (list.hasNext()) {
+			if (list.nextIndex() >= 1) {
+				keywordList += ", ";
+			}
+			keywordList += list.next();
+		}
+		return keywordList;
+	}
+
+	/**
+	 * @return a string of data members in tabular form
+	 */
+	@Override
+	public String toString() {
+		return String.format("%-6s | %-20s | %-15s | %-30s", rank, url, "***", keywordsToString());
 	}
 
 }
