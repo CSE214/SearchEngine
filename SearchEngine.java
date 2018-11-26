@@ -65,6 +65,10 @@ public class SearchEngine {
 			addLink();
 			break;
 		}
+		case ("RL"): {
+			removeLink();
+			break;
+		}
 		default: {
 			System.out.println("That command is not valid. Please try again.");
 		}
@@ -106,8 +110,32 @@ public class SearchEngine {
 		System.out.println("\n" + url + " has been removed from the grpah!");
 	}
 
+	/**
+	 * Allows the user to add a link between pages.
+	 */
 	public static void addLink() {
+		System.out.print("Enter a source URL: ");
+		String source = in.nextLine();
+		System.out.print("Enter a destination URL: ");
+		String destination = in.nextLine();
+		try {
+			web.addLink(source, destination);
+			System.out.println("\nLinked successfully added from " + source + " to " + destination + "!");
+		} catch (IllegalArgumentException e) {
+			System.out.println("The source or destination does not exist.");
+		}
+	}
 
+	/**
+	 * Allows the user to remove a link between pages.
+	 */
+	public static void removeLink() {
+		System.out.print("Enter a source URL: ");
+		String source = in.nextLine();
+		System.out.print("Enter a destination URL: ");
+		String destination = in.nextLine();
+		web.removeLink(source, destination);
+		System.out.println("\nLinked removed from " + source + " to " + destination + "!");
 	}
 
 	/**
