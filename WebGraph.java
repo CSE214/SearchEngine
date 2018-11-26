@@ -18,7 +18,7 @@ public class WebGraph {
 	/**
 	 * Returns an instance of WebGraph
 	 */
-	public WebGraph(int maxPages) {
+	public WebGraph() {
 		this.edges = new int[MAX_PAGES][MAX_PAGES];
 		this.pages = new LinkedList<WebPage>();
 		this.pageCount = 0;
