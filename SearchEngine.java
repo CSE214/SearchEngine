@@ -20,7 +20,14 @@ public class SearchEngine {
 	 * Initializes the web graph.
 	 */
 	public static void init() {
-		web = new WebGraph();
+		System.out.println("Loading WebGraph data...");
+		try {
+			web = WebGraph.buildFromFiles("pages.txt", "links.txt");
+			System.out.println("Success!");
+		} catch (Exception e) {
+			web = new WebGraph();
+			System.out.println("Something went wrong. Start from empty WebGraph.");
+		}
 	}
 
 	/**
@@ -154,8 +161,8 @@ public class SearchEngine {
 	 * Prints the graph according to the user's preferences.
 	 */
 	public static void printGraph() {
-		System.out.println("(I) - Sort based on index.\r\n" + "(U) - Sort based on URL.\r\n"
-				+ "(R) - Sort based on rank.\r\n" + "\n");
+		System.out.println(
+				"(I) - Sort based on index.\r\n" + "(U) - Sort based on URL.\r\n" + "(R) - Sort based on rank.\r\n");
 		System.out.print("Please select an option: ");
 		String command = in.nextLine().trim();
 		switch (command.toUpperCase()) {

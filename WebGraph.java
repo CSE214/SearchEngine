@@ -1,5 +1,9 @@
 package searchEngine;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -16,6 +20,60 @@ public class WebGraph {
 	private int[][] edges;
 	private LinkedList<WebPage> pages;
 	private int pageCount;
+
+	/**
+	 * Constructs a WebGraph object using the indicated files as the source for
+	 * pages and edges.
+	 * 
+	 * @param pagesFile The path to the pages file
+	 * @param linksFile The path to the links file
+	 * 
+	 *                  <dl>
+	 *                  <dt>Preconditions:</dt>
+	 *                  <dd>Both parameters reference text files which exist. The
+	 *                  files follow proper format as outlined in the "Reading Graph
+	 *                  from File" section below.</dd>
+	 *                  </dl>
+	 *                  <dl>
+	 *                  <dt>Postconditions:</dt>
+	 *                  <dd>A WebGraph has been constructed and initialized based on
+	 *                  the text files.</dd>
+	 *                  </dl>
+	 * 
+	 * @return The constructed webgraph
+	 * @throws IllegalArgumentException Thrown if either of the files does not
+	 *                                  reference a valid text file, or if the files
+	 *                                  are not formatted correctly.
+	 */
+	public static WebGraph buildFromFiles(String pagesFilePath, String linksFilePath) throws IllegalArgumentException {
+		try {
+			FileInputStream pagesFile = new FileInputStream(pagesFilePath);
+			InputStreamReader inStream = new InputStreamReader(pagesFile);
+			BufferedReader reader = new BufferedReader(inStream);
+			WebGraph webGraph = new WebGraph();
+			String line = "";
+			while ((line = reader.readLine()) != null) {
+				String[] words = line.trim().split(" ");
+				String url = words[0];
+				LinkedList<String> keywords = new LinkedList(Arrays.asList(Arrays.copyOfRange(words, 1, words.length)));
+				webGraph.addPage(url, keywords);
+			}
+			FileInputStream linksFile = new FileInputStream(linksFilePath);
+			inStream = new InputStreamReader(linksFile);
+			reader = new BufferedReader(inStream);
+			while ((line = reader.readLine()) != null) {
+				String[] words = line.trim().split(" ");
+				String source = words[0];
+				String destination = words[1];
+				webGraph.addLink(source, destination);
+			}
+			reader.close();
+			return webGraph;
+		} catch (Exception e) {
+			System.out.println(e);
+			throw new IllegalArgumentException("One of the paths is invalid.");
+		}
+	}
 
 	public void sortPages(Comparator<WebPage> comparator) {
 		Collections.sort(pages, comparator);
@@ -224,7 +282,7 @@ public class WebGraph {
 		String linkString = "";
 		for (int i = 0; i < destinations.length; i++) {
 			if (destinations[i] == 1) {
-				linkString += (i == 0 ? i : ", " + i);
+				linkString += (linkString.equals("") ? i : ", " + i);
 			}
 		}
 		return linkString;
@@ -234,10 +292,11 @@ public class WebGraph {
 	 * Prints the WebGraph in tabular form
 	 */
 	public void printTable() {
-		String heading = String.format("%-6s | %-25s | %-10s | %-15s | %-30s", "Index", "URL", "PageRank", "Links",
+		String heading = String.format("%-6s | %-25s | %-10s | %-20s | %-30s", "Index", "URL", "PageRank", "Links",
 				"Keywords");
 		System.out.println("\n" + heading);
-		System.out.println("======================================================================================");
+		System.out.println(
+				"==========================================================================================================================");
 		ListIterator<WebPage> list = pages.listIterator();
 		while (list.hasNext()) {
 			WebPage webPage = list.next();
