@@ -210,14 +210,32 @@ public class WebGraph {
 	}
 
 	/**
+	 * @return A list of indices that correspond to the webpages that url links to.
+	 */
+	public String getLinkString(String url) {
+		int index = getIndex(url);
+		int[] destinations = edges[index];
+		String linkString = "";
+		for (int i = 0; i < destinations.length; i++) {
+			if (destinations[i] == 1) {
+				linkString += (i == 0 ? i : ", " + i);
+			}
+		}
+		return linkString;
+	}
+
+	/**
 	 * Prints the WebGraph in tabular form
 	 */
 	public void printTable() {
-		String heading = String.format("%-6s | %-20s | %-15s | %-30s", "Index", "URL", "PageRank", "Links", "Keywords");
+		String heading = String.format("%-6s | %-20s | %-10s | %-15s | %-30s", "Index", "URL", "PageRank", "Links",
+				"Keywords");
 		System.out.println("\n" + heading);
+		System.out.println("======================================================================================");
 		ListIterator<WebPage> list = pages.listIterator();
 		while (list.hasNext()) {
-			System.out.println(list.next().toString());
+			WebPage webPage = list.next();
+			System.out.println(webPage.toString(getLinkString(webPage.getUrl())));
 		}
 	}
 

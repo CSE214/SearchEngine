@@ -69,6 +69,14 @@ public class SearchEngine {
 			removeLink();
 			break;
 		}
+		case ("P"): {
+			printGraph();
+			break;
+		}
+		case ("Q"): {
+			quit();
+			break;
+		}
 		default: {
 			System.out.println("That command is not valid. Please try again.");
 		}
@@ -136,6 +144,25 @@ public class SearchEngine {
 		String destination = in.nextLine();
 		web.removeLink(source, destination);
 		System.out.println("\nLinked removed from " + source + " to " + destination + "!");
+	}
+
+	/**
+	 * Prints the graph according to the user's preferences.
+	 */
+	public static void printGraph() {
+		System.out.println("(I) - Sort based on index.\r\n" + "(U) - Sort based on URL.\r\n"
+				+ "(R) - Sort based on rank.\r\n" + "\n");
+		System.out.print("Please select an option: ");
+		String command = in.nextLine().trim();
+		web.printTable();
+	}
+
+	/**
+	 * Allows the user to exit the program.
+	 */
+	public static void quit() {
+		System.out.println("Goodbye.");
+		System.exit(0);
 	}
 
 	/**

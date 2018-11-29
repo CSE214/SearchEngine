@@ -104,7 +104,14 @@ public class WebPage {
 	 */
 	@Override
 	public String toString() {
-		return String.format("%-6s | %-20s | %-15s | %-30s", rank, url, "***", keywordsToString());
+		return String.format("%-6s | %-20s | %-10s | %-15s | %-30s", index, url, rank, "---", keywordsToString());
+	}
+
+	/**
+	 * @return a string of data members in tabular form
+	 */
+	public String toString(String links) {
+		return String.format("%-6s | %-20s | %-10s | %-15s | %-30s", index, url, rank, links, keywordsToString());
 	}
 
 }
