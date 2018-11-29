@@ -1,5 +1,7 @@
 package searchEngine;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
@@ -14,6 +16,10 @@ public class WebGraph {
 	private int[][] edges;
 	private LinkedList<WebPage> pages;
 	private int pageCount;
+
+	public void sortPages(Comparator<WebPage> comparator) {
+		Collections.sort(pages, comparator);
+	}
 
 	/**
 	 * Returns an instance of WebGraph

@@ -91,7 +91,7 @@ public class WebPage {
 		String keywordList = "";
 		ListIterator<String> list = keywords.listIterator();
 		while (list.hasNext()) {
-			if (list.nextIndex() >= 1) {
+			if (!keywordList.equals("")) {
 				keywordList += ", ";
 			}
 			keywordList += list.next();

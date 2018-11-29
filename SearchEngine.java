@@ -154,7 +154,23 @@ public class SearchEngine {
 				+ "(R) - Sort based on rank.\r\n" + "\n");
 		System.out.print("Please select an option: ");
 		String command = in.nextLine().trim();
-		web.printTable();
+		switch (command.toUpperCase()) {
+		case ("I"):
+			web.sortPages(new IndexComparator());
+			web.printTable();
+			break;
+		case ("U"):
+			web.sortPages(new UrlComparator());
+			web.printTable();
+			break;
+		case ("R"):
+			web.sortPages(new RankComparator());
+			web.printTable();
+			break;
+		default:
+			System.out.println("That command is not valid. Please try again.");
+			break;
+		}
 	}
 
 	/**
