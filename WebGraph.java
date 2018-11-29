@@ -234,7 +234,7 @@ public class WebGraph {
 	 * Prints the WebGraph in tabular form
 	 */
 	public void printTable() {
-		String heading = String.format("%-6s | %-20s | %-10s | %-15s | %-30s", "Index", "URL", "PageRank", "Links",
+		String heading = String.format("%-6s | %-25s | %-10s | %-15s | %-30s", "Index", "URL", "PageRank", "Links",
 				"Keywords");
 		System.out.println("\n" + heading);
 		System.out.println("======================================================================================");
@@ -242,6 +242,35 @@ public class WebGraph {
 		while (list.hasNext()) {
 			WebPage webPage = list.next();
 			System.out.println(webPage.toString(getLinkString(webPage.getUrl())));
+		}
+	}
+
+	/**
+	 * Prints a table of search results.
+	 * 
+	 * @param keyword keyword to search for
+	 */
+	public void printSearchResults(String keyword) {
+		sortPages(new RankComparator());
+		ListIterator<WebPage> list = pages.listIterator();
+		int i = 1;
+		boolean hasResults = false;
+		String table = "";
+		String header = String.format("%-6s | %-10s | %-25s", "Rank", "PageRank", "URL");
+		table += header;
+		table += "\n===========================================================";
+		while (list.hasNext()) {
+			WebPage webPage = list.next();
+			if (webPage.getKeywords().contains(keyword)) {
+				table += String.format("\n%-6s | %-10s | %-25s", i, webPage.getRank(), webPage.getUrl());
+				i += 1;
+				hasResults = true;
+			}
+		}
+		if (!hasResults) {
+			System.out.println("\nNo search results found for the keyword " + keyword + ".");
+		} else {
+			System.out.println(table);
 		}
 	}
 

@@ -73,6 +73,10 @@ public class SearchEngine {
 			printGraph();
 			break;
 		}
+		case ("S"): {
+			search();
+			break;
+		}
 		case ("Q"): {
 			quit();
 			break;
@@ -171,6 +175,15 @@ public class SearchEngine {
 			System.out.println("That command is not valid. Please try again.");
 			break;
 		}
+	}
+
+	/**
+	 * Allows the user to search for pages by keyword.
+	 */
+	public static void search() {
+		System.out.print("Search keyword: ");
+		String keyword = in.nextLine();
+		web.printSearchResults(keyword);
 	}
 
 	/**
