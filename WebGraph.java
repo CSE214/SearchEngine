@@ -206,6 +206,8 @@ public class WebGraph {
 			throw new IllegalArgumentException("The source is not in the graph.");
 		} else if (destinationIndex == -1) {
 			throw new IllegalArgumentException("The destination is not in the graph.");
+		} else if (edges[sourceIndex][destinationIndex] == 1) {
+			throw new IllegalArgumentException("That link already exists.");
 		}
 
 		edges[sourceIndex][destinationIndex] = 1;

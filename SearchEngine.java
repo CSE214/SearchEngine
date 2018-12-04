@@ -141,7 +141,7 @@ public class SearchEngine {
 			web.addLink(source, destination);
 			System.out.println("\nLinked successfully added from " + source + " to " + destination + "!");
 		} catch (IllegalArgumentException e) {
-			System.out.println("The source or destination does not exist.");
+			System.out.println(e.getMessage());
 		}
 	}
 
